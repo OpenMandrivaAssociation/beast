@@ -15,8 +15,8 @@
 Name: 	 	beast
 Summary: 	Music composition and audio synthesis framework and tool
 Version: 	%{version}
-Release: 	%mkrel 2
-Source0:	ftp://beast.gtk.org/pub/beast/v0.6/%{name}-%{version}.tar.bz2
+Release: 	%mkrel 3
+Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
 Patch2:		%{name}-guile-fix.patch
@@ -32,6 +32,7 @@ BuildRequires:	libmad-devel
 BuildRequires:	libvorbis-devel >= 1.0
 BuildRequires:	X11-devel
 BuildRequires:	perl-XML-Parser
+BuildRequires:	desktop-file-utils
 Requires:	%{libname}_%{major} = %{version}
 
 %description
@@ -87,7 +88,7 @@ Libraries and includes files for developing programs based on %{name}.
 %patch2
 
 %build
-%configure2_5x \
+%configure \
 %if %custom_dsp
 	--enable-osspcm=%dsp_device \
 %else
@@ -105,18 +106,9 @@ Libraries and includes files for developing programs based on %{name}.
 rm -rf $RPM_BUILD_ROOT
 %makeinstall_std UPDATE_MIME_DATABASE=
 
-#menu
-mkdir -p $RPM_BUILD_ROOT%{_menudir}
-cat << EOF > $RPM_BUILD_ROOT%{_menudir}/%{name}
-?package(%{name}): \
- command="%{name}" \
- icon="%{name}.png" \
- needs="x11" \
- title="Beast" \
- longtitle="Composition and Synthesis" \
- section="Multimedia/Sound" \
- xdg="true"
-EOF
+desktop-file-install --vendor="" \
+  --remove-category="Application" \
+  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
 
 #icons
 mkdir -p $RPM_BUILD_ROOT%{_iconsdir} \
@@ -157,7 +149,6 @@ update-mime-database %{_datadir}/mime > /dev/null
 %{_datadir}/pixmaps/*
 %{_libdir}/bse
 %{_mandir}/man1/*
-%{_menudir}/%{name}
 %{_liconsdir}/%{name}.png
 %{_iconsdir}/%{name}.png
 %{_miconsdir}/%{name}.png
