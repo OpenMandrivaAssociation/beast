@@ -133,8 +133,12 @@ update-mime-database %{_datadir}/mime > /dev/null
 %clean_menus
 update-mime-database %{_datadir}/mime > /dev/null
 
+%if %mdkversion < 200900
 %post -n %{libname}_%{major} -p /sbin/ldconfig
+%endif
+%if %mdkversion < 200900
 %postun -n %{libname}_%{major} -p /sbin/ldconfig
+%endif
 
 %files -f %{name}.lang
 %defattr(-,root,root)
