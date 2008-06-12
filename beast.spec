@@ -126,11 +126,15 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/bse/v*/plugins/*.la
 rm -rf $RPM_BUILD_ROOT
 
 %post
+%if %mdkversion < 200900
 %update_menus
+%endif
 update-mime-database %{_datadir}/mime > /dev/null
 		
 %postun
+%if %mdkversion < 200900
 %clean_menus
+%endif
 update-mime-database %{_datadir}/mime > /dev/null
 
 %if %mdkversion < 200900
