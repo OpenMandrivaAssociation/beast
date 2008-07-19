@@ -15,11 +15,18 @@
 Name: 	 	beast
 Summary: 	Music composition and audio synthesis framework and tool
 Version: 	%{version}
-Release: 	%mkrel 3
+Release: 	%mkrel 4
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
 Patch2:		%{name}-guile-fix.patch
+# ubuntuu patches
+Patch101: 100_deprecated.diff
+Patch102: 200_signal_h.diff
+Patch103: 201_sparc_alignment.diff
+Patch104:  202_gcc43.diff
+Patch105:  203_fix_buffer_overflow.diff
+Patch106:  300_mksignals_bashism.diff
 URL:		http://beast.gtk.org/
 License:	GPL
 Group:		Sound
@@ -86,9 +93,15 @@ Libraries and includes files for developing programs based on %{name}.
 %patch0
 %patch1
 %patch2
+%patch101 -p1
+%patch102 -p1
+%patch103 -p1
+%patch104 -p1
+%patch105 -p1
+%patch106 -p1
 
 %build
-%configure \
+%configure2_5x \
 %if %custom_dsp
 	--enable-osspcm=%dsp_device \
 %else
