@@ -3,8 +3,9 @@
 # maintainer is lazy, just using version number as API version and library
 # major -- Abel
 %define api_version	0.7
-%define major		0
+%define major		1
 %define libname %mklibname %{name} %{api_version}
+%define develname %mklibname %{name} -d
 
 %define custom_dsp 0
 %{?dsp_device: %global custom_dsp 1}
@@ -15,7 +16,7 @@
 Name: 	 	beast
 Summary: 	Music composition and audio synthesis framework and tool
 Version: 	%{version}
-Release: 	%mkrel 4
+Release: 	%mkrel 5
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
@@ -28,7 +29,7 @@ Patch104:  202_gcc43.diff
 Patch105:  203_fix_buffer_overflow.diff
 Patch106:  300_mksignals_bashism.diff
 URL:		http://beast.gtk.org/
-License:	GPL
+License:	GPLv2+
 Group:		Sound
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	guile-devel >= 1.6
@@ -63,7 +64,7 @@ this is the case, please rebuild this RPM with the following options
 %package -n 	%{libname}_%{major}
 Summary:        Dynamic libraries from %{name}
 Group:          System/Libraries
-License:	LGPL
+License:	LGPLv2+
 Provides:	%{libname} = %{version}-%{release}
 
 %description -n %{libname}_%{major}
@@ -76,16 +77,16 @@ library modules, and get loaded on demand.
 
 You must install this library before running %{name}.
 
-%package -n 	%{libname}_%{major}-devel
+%package -n 	%{develname}
 Summary: 	Header files and static libraries from %{name}
 Group: 		Development/C
-License:	LGPL
+License:	LGPLv2+
 Requires: 	%{libname}_%{major} = %{version}
 Provides: 	%{libname}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release} 
-Obsoletes: 	%{name}-devel
+Obsoletes: 	%{libname}_%{major}-devel
 
-%description -n %{libname}_%{major}-devel
+%description -n %{develname}
 Libraries and includes files for developing programs based on %{name}.
 
 %prep
@@ -176,9 +177,9 @@ update-mime-database %{_datadir}/mime > /dev/null
 
 %files -n %{libname}_%{major}
 %defattr(-,root,root)
-%{_libdir}/*.so.*
+%{_libdir}/libbse-%{api_version}.so.%{major}*
 
-%files -n %{libname}_%{major}-devel
+%files -n %{develname}
 %defattr(-,root,root)
 %doc ChangeLog
 %{_includedir}/*
