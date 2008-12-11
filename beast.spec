@@ -34,7 +34,7 @@ Group:		Sound
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	guile-devel >= 1.6
 BuildRequires:	gtk2-devel >= 2.4.11
-BuildRequires:	ImageMagick
+BuildRequires:	imagemagick
 BuildRequires:	libgnomecanvas2-devel
 BuildRequires:	libmad-devel
 BuildRequires:	libvorbis-devel >= 1.0
