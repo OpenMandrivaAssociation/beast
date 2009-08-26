@@ -16,16 +16,17 @@
 Name: 	 	beast
 Summary: 	Music composition and audio synthesis framework and tool
 Version: 	%{version}
-Release: 	%mkrel 5
+Release: 	%mkrel 6
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
 Patch2:		%{name}-guile-fix.patch
+Patch3:		%{name}-0.7.1-gcc44.patch
 # ubuntuu patches
-Patch101: 100_deprecated.diff
+#Patch101: 100_deprecated.diff
 Patch102: 200_signal_h.diff
 Patch103: 201_sparc_alignment.diff
-Patch104:  202_gcc43.diff
+#Patch104:  202_gcc43.diff
 Patch105:  203_fix_buffer_overflow.diff
 Patch106:  300_mksignals_bashism.diff
 URL:		http://beast.gtk.org/
@@ -91,13 +92,14 @@ Libraries and includes files for developing programs based on %{name}.
 
 %prep
 %setup -q
-%patch0
-%patch1
-%patch2
-%patch101 -p1
+%patch0 -p0
+%patch1 -p0
+%patch2 -p0
+%patch3	-p1
+#%patch101 -p1
 %patch102 -p1
 %patch103 -p1
-%patch104 -p1
+#%patch104 -p1
 %patch105 -p1
 %patch106 -p1
 
@@ -117,27 +119,27 @@ Libraries and includes files for developing programs based on %{name}.
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std UPDATE_MIME_DATABASE=
 
 desktop-file-install --vendor="" \
   --remove-category="Application" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*
 
 #icons
-mkdir -p $RPM_BUILD_ROOT%{_iconsdir} \
-         $RPM_BUILD_ROOT%{_miconsdir}
-install -D -m 644       data/beast.png $RPM_BUILD_ROOT%{_liconsdir}/%{name}.png
-convert -geometry 32x32 data/beast.png $RPM_BUILD_ROOT%{_iconsdir}/%{name}.png
-convert -geometry 16x16 data/beast.png $RPM_BUILD_ROOT%{_miconsdir}/%{name}.png
+mkdir -p %{buildroot}%{_iconsdir} \
+         %{buildroot}%{_miconsdir}
+install -D -m 644       data/beast.png %{buildroot}%{_liconsdir}/%{name}.png
+convert -geometry 32x32 data/beast.png %{buildroot}%{_iconsdir}/%{name}.png
+convert -geometry 16x16 data/beast.png %{buildroot}%{_miconsdir}/%{name}.png
 
 # remove files not bundled
-rm -f $RPM_BUILD_ROOT%{_libdir}/bse/v*/plugins/*.la
+rm -f %{buildroot}%{_libdir}/bse/v*/plugins/*.la
 
 %find_lang %{name} --all-name
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %post
 %if %mdkversion < 200900
