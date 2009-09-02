@@ -16,7 +16,7 @@
 Name: 	 	beast
 Summary: 	Music composition and audio synthesis framework and tool
 Version: 	%{version}
-Release: 	%mkrel 7
+Release: 	%mkrel 8
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
