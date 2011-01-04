@@ -22,6 +22,8 @@ Patch0:		%{name}-tests-bse-filtertest.cc.diff
 Patch1:		%{name}-data-desktop.in.diff
 Patch2:		%{name}-guile-fix.patch
 Patch3:		%{name}-0.7.1-gcc44.patch
+Patch4:		beast-0.7.1-volatile.diff
+Patch5:		beast-0.7.1-fix-str-fmt.patch
 # ubuntuu patches
 #Patch101: 100_deprecated.diff
 Patch102: 200_signal_h.diff
@@ -96,6 +98,8 @@ Libraries and includes files for developing programs based on %{name}.
 %patch1 -p0
 %patch2 -p0
 %patch3	-p1
+%patch4 -p1
+%patch5 -p1
 #%patch101 -p1
 %patch102 -p1
 %patch103 -p1
