@@ -1,0 +1,11 @@
+--- beast-0.7.1/birnet/birnetthreadimpl.cc.orig	2011-01-04 06:07:58.000000000 +0000
++++ beast-0.7.1/birnet/birnetthreadimpl.cc	2011-01-04 06:08:36.000000000 +0000
+@@ -1491,7 +1491,7 @@
+ 
+ #ifdef g_atomic_pointer_get
+ static void*
+-(g_atomic_pointer_get) (volatile void **atomic)
++(g_atomic_pointer_get) (void * volatile *atomic)
+ {
+   return (void*) g_atomic_pointer_get (atomic);
+ }

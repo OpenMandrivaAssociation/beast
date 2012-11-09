@@ -1,0 +1,17 @@
+Index: beast-0.7.1/birnet/birnetcdefs.h
+===================================================================
+--- beast-0.7.1.orig/birnet/birnetcdefs.h	2008-02-09 14:32:27.000000000 +0000
++++ beast-0.7.1/birnet/birnetcdefs.h	2008-02-09 14:32:42.000000000 +0000
+@@ -245,10 +245,12 @@
+ typedef union {
+   void	     *cond_pointer;
+   BirnetUInt8 cond_dummy[MAX (8, BIRNET_SIZEOF_PTH_COND_T)];
++  long long int align;
+ } BirnetCond;
+ typedef union {
+   void	     *mutex_pointer;
+   BirnetUInt8 mutex_dummy[MAX (8, BIRNET_SIZEOF_PTH_MUTEX_T)];
++  long long int align;
+ } BirnetMutex;
+ typedef struct {
+   BirnetMutex   mutex;
