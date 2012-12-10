@@ -1,0 +1,232 @@
+diff -urN beast-0.7.6-orig/beast-gtk/bstprojectctrl.c beast-0.7.6-patched/beast-gtk/bstprojectctrl.c
+--- beast-0.7.6-orig/beast-gtk/bstprojectctrl.c	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/beast-gtk/bstprojectctrl.c	2012-11-06 01:51:44.538886246 +1100
+@@ -36,7 +36,7 @@
+ 	starting = _("Starting Playback");
+       bse_project_auto_deactivate (self->project, 0);
+       error = bse_project_play (self->project);
+-      bst_status_eprintf (error, starting);
++      bst_status_eprintf (error, "%s", starting);
+     }
+ }
+ 
+diff -urN beast-0.7.6-orig/bse/bseconstant.cc beast-0.7.6-patched/bse/bseconstant.cc
+--- beast-0.7.6-orig/bse/bseconstant.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bseconstant.cc	2012-11-06 01:28:37.008899841 +1100
+@@ -105,7 +105,7 @@
+       gchar *ident, *label, *blurb, *group = g_strdup_printf (_("Constant Output %u"), i);
+       
+       ident = g_strdup_printf ("value_%u", i);
+-      label = g_strdup_printf (_("Value [float]"));
++      label = g_strdup_printf ("%s", _("Value [float]"));
+       bse_object_class_add_param (object_class, group, PARAM_VALUE + (i - 1) * 3,
+ 				  sfi_pspec_real (ident, label, _("Constant signal value"),
+ 						  1.0, -1.0, 1.0, 0.01,
+@@ -113,7 +113,7 @@
+       g_free (ident);
+       g_free (label);
+       ident = g_strdup_printf ("frequency_%u", i);
+-      label = g_strdup_printf (_("Frequency"));
++      label = g_strdup_printf ("%s", _("Frequency"));
+       bse_object_class_add_param (object_class, group, PARAM_FREQ + (i - 1) * 3,
+ 				  sfi_pspec_log_scale (ident, label, _("Constant signal value interpreted as frequency value in Hertz"),
+ 						       BSE_MAX_FREQUENCY,
+@@ -124,7 +124,7 @@
+       g_free (ident);
+       g_free (label);
+       ident = g_strdup_printf ("note_%u", i);
+-      label = g_strdup_printf (_("Note"));
++      label = g_strdup_printf ("%s", _("Note"));
+       bse_object_class_add_param (object_class, group, PARAM_NOTE + (i - 1) * 3,
+ 				  sfi_pspec_note (ident, label, _("Constant signal value as note, converted to Hertz according to the current musical tuning"),
+ 						  SFI_KAMMER_NOTE, SFI_MIN_NOTE, SFI_MAX_NOTE,
+diff -urN beast-0.7.6-orig/bse/bsedatapocket.cc beast-0.7.6-patched/bse/bsedatapocket.cc
+--- beast-0.7.6-orig/bse/bsedatapocket.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bsedatapocket.cc	2012-11-06 01:35:46.326895408 +1100
+@@ -552,7 +552,7 @@
+   BseDataPocket *pocket = BSE_DATA_POCKET (from_item);
+   
+   if (error)
+-    bse_storage_warn (storage, error);
++    bse_storage_warn (storage, "%s", error);
+   else if (oentry->id)
+     {
+       BseDataPocketValue value;
+diff -urN beast-0.7.6-orig/bse/bseitem.cc beast-0.7.6-patched/bse/bseitem.cc
+--- beast-0.7.6-orig/bse/bseitem.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bseitem.cc	2012-11-06 01:37:37.180895012 +1100
+@@ -885,7 +885,7 @@
+     {
+       const char *packed_item_pointer = g_value_get_string (ivalues + 0);
+       BseItem *item = (BseItem*) bse_undo_pointer_unpack (packed_item_pointer, ustack);
+-      BseUndoStack *redo_stack = (BseUndoStack*) bse_item_undo_open (item, BSE_PROCEDURE_NAME (proc));
++      BseUndoStack *redo_stack = (BseUndoStack*) bse_item_undo_open (item, "%s", BSE_PROCEDURE_NAME (proc));
+       BseUndoStep *redo_step;
+       redo_step = bse_undo_step_new (undo_call_proc, unde_free_proc, 3);
+       redo_step->data[0].v_pointer = proc;
+diff -urN beast-0.7.6-orig/bse/bsejanitor.cc beast-0.7.6-patched/bse/bsejanitor.cc
+--- beast-0.7.6-orig/bse/bsejanitor.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bsejanitor.cc	2012-11-06 01:38:37.809892709 +1100
+@@ -532,9 +532,9 @@
+     {
+       self->exit_code = 256; /* exit code used for signals */
+       if (port->exit_signal_sent && port->sigkill_sent)
+-        self->exit_reason = g_strdup_printf (_("killed by janitor"));
++        self->exit_reason = g_strdup_printf ("%s", _("killed by janitor"));
+       else if (port->exit_signal_sent && port->sigterm_sent)
+-        self->exit_reason = g_strdup_printf (_("connection terminated"));
++        self->exit_reason = g_strdup_printf ("%s", _("connection terminated"));
+       else if (port->exit_signal && port->dumped_core)
+         self->exit_reason = g_strdup_printf (_("%s (core dumped)"), g_strsignal (port->exit_signal));
+       else if (port->exit_signal)
+diff -urN beast-0.7.6-orig/bse/bsemain.cc beast-0.7.6-patched/bse/bsemain.cc
+--- beast-0.7.6-orig/bse/bsemain.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bsemain.cc	2012-11-06 01:39:10.614894326 +1100
+@@ -267,9 +267,9 @@
+   /* dump device list */
+   if (bse_main_args->dump_driver_list)
+     {
+-      g_printerr (_("\nAvailable PCM drivers:\n"));
++      g_printerr ("%s", _("\nAvailable PCM drivers:\n"));
+       bse_device_dump_list (BSE_TYPE_PCM_DEVICE, "  ", TRUE, NULL, NULL);
+-      g_printerr (_("\nAvailable MIDI drivers:\n"));
++      g_printerr ("%s", _("\nAvailable MIDI drivers:\n"));
+       bse_device_dump_list (BSE_TYPE_MIDI_DEVICE, "  ", TRUE, NULL, NULL);
+     }
+ }
+diff -urN beast-0.7.6-orig/bse/bseserver.c beast-0.7.6-patched/bse/bseserver.c
+--- beast-0.7.6-orig/bse/bseserver.c	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bseserver.c	2012-11-06 01:42:04.646894861 +1100
+@@ -474,9 +474,9 @@
+       server->pcm_input_checked = TRUE;
+       if (!BSE_DEVICE_READABLE (server->pcm_device))
+         sfi_msg_display (SFI_MSG_WARNING,
+-                         SFI_MSG_TITLE (_("Recording Audio Input")),
+-                         SFI_MSG_TEXT1 (_("Failed to start recording from audio device.")),
+-                         SFI_MSG_TEXT2 (_("An audio project is in use which processes an audio input signal, but the audio device "
++                         SFI_MSG_TITLE ("%s", _("Recording Audio Input")),
++                         SFI_MSG_TEXT1 ("%s", _("Failed to start recording from audio device.")),
++                         SFI_MSG_TEXT2 ("%s", _("An audio project is in use which processes an audio input signal, but the audio device "
+                                           "has not been opened in recording mode. "
+                                           "An audio signal of silence will be used instead of a recorded signal, "
+                                           "so playback operation may produce results not actually intended "
+@@ -485,7 +485,7 @@
+                                         BSE_DEVICE (server->pcm_device)->open_device_name,
+                                         BSE_DEVICE_GET_CLASS (server->pcm_device)->driver_name,
+                                         BSE_DEVICE (server->pcm_device)->open_device_args),
+-                         SFI_MSG_CHECK (_("Show messages about audio input problems")));
++                         SFI_MSG_CHECK ("%s", _("Show messages about audio input problems")));
+     }
+ }
+ 
+@@ -527,12 +527,12 @@
+                                                                pcm_request_callback, &pr, error ? NULL : &error);
+   if (!server->pcm_device)
+     sfi_msg_display (SFI_MSG_ERROR,
+-                     SFI_MSG_TITLE (_("No Audio")),
+-                     SFI_MSG_TEXT1 (_("No available audio device was found.")),
+-                     SFI_MSG_TEXT2 (_("No available audio device could be found and opened successfully. "
++                     SFI_MSG_TITLE ("%s", _("No Audio")),
++                     SFI_MSG_TEXT1 ("%s", _("No available audio device was found.")),
++                     SFI_MSG_TEXT2 ("%s", _("No available audio device could be found and opened successfully. "
+                                       "Sorry, no fallback selection can be made for audio devices, giving up.")),
+                      SFI_MSG_TEXT3 (_("Failed to open PCM devices: %s"), bse_error_blurb (error)),
+-                     SFI_MSG_CHECK (_("Show messages about PCM device selections problems")));
++                     SFI_MSG_CHECK ("%s", _("Show messages about PCM device selections problems")));
+   server->pcm_input_checked = FALSE;
+   return server->pcm_device ? BSE_ERROR_NONE : error;
+ }
+@@ -551,12 +551,12 @@
+       sfi_ring_free (ring);
+       if (server->midi_device)
+         sfi_msg_display (SFI_MSG_WARNING,
+-                         SFI_MSG_TITLE (_("No MIDI")),
+-                         SFI_MSG_TEXT1 (_("MIDI input or oputput is not available.")),
+-                         SFI_MSG_TEXT2 (_("No available MIDI device could be found and opened successfully. "
++                         SFI_MSG_TITLE ("%s", _("No MIDI")),
++                         SFI_MSG_TEXT1 ("%s", _("MIDI input or oputput is not available.")),
++                         SFI_MSG_TEXT2 ("%s", _("No available MIDI device could be found and opened successfully. "
+                                           "Reverting to null device, no MIDI events will be received or sent.")),
+                          SFI_MSG_TEXT3 (_("Failed to open MIDI devices: %s"), bse_error_blurb (error)),
+-                         SFI_MSG_CHECK (_("Show messages about MIDI device selections problems")));
++                         SFI_MSG_CHECK ("%s", _("Show messages about MIDI device selections problems")));
+     }
+   return server->midi_device ? BSE_ERROR_NONE : error;
+ }
+@@ -610,12 +610,12 @@
+ 	  if (error)
+ 	    {
+               sfi_msg_display (SFI_MSG_ERROR,
+-                               SFI_MSG_TITLE (_("Start Disk Recording")),
+-                               SFI_MSG_TEXT1 (_("Failed to start recording to disk.")),
+-                               SFI_MSG_TEXT2 (_("An error occoured while opening the recording file, selecting a different "
++                               SFI_MSG_TITLE ("%s", _("Start Disk Recording")),
++                               SFI_MSG_TEXT1 ("%s", _("Failed to start recording to disk.")),
++                               SFI_MSG_TEXT2 ("%s", _("An error occoured while opening the recording file, selecting a different "
+                                                 "file might fix this situation.")),
+                                SFI_MSG_TEXT3 (_("Failed to open file \"%s\" for output: %s"), self->wave_file, bse_error_blurb (error)),
+-                               SFI_MSG_CHECK (_("Show recording file errors")));
++                               SFI_MSG_CHECK ("%s", _("Show recording file errors")));
+ 	      g_object_unref (self->pcm_writer);
+ 	      self->pcm_writer = NULL;
+ 	    }
+diff -urN beast-0.7.6-orig/bse/bsestorage.c beast-0.7.6-patched/bse/bsestorage.c
+--- beast-0.7.6-orig/bse/bsestorage.c	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bsestorage.c	2012-11-06 01:42:31.185891898 +1100
+@@ -601,7 +601,7 @@
+                     const gchar *error)
+ {
+   if (error)
+-    bse_storage_warn (self, error);
++    bse_storage_warn (self, "%s", error);
+   else
+     {
+       GParamSpec *pspec = data;
+diff -urN beast-0.7.6-orig/bse/bsetrack.c beast-0.7.6-patched/bse/bsetrack.c
+--- beast-0.7.6-orig/bse/bsetrack.c	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/bsetrack.c	2012-11-06 01:43:07.304891452 +1100
+@@ -939,7 +939,7 @@
+   BseTrack *self = BSE_TRACK (from_item);
+ 
+   if (error)
+-    bse_storage_warn (storage, error);
++    bse_storage_warn (storage, "%s", error);
+   else if (!BSE_IS_PART (to_item))
+     bse_storage_warn (storage, "skipping invalid part reference: %s", bse_object_debug_name (to_item));
+   else if (to_item->parent != from_item->parent)
+diff -urN beast-0.7.6-orig/bse/gslcommon.c beast-0.7.6-patched/bse/gslcommon.c
+--- beast-0.7.6-orig/bse/gslcommon.c	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/bse/gslcommon.c	2012-11-06 01:26:08.630902207 +1100
+@@ -330,7 +330,7 @@
+       memset (wstr, ' ', pstate->wipe_length);
+       wstr[pstate->wipe_length] = '\r';
+       wstr[pstate->wipe_length + 1] = 0;
+-      g_printerr (wstr);
++      g_printerr ("%s", wstr);
+       g_free (wstr);
+       pstate->wipe_length = 0;
+     }
+diff -urN beast-0.7.6-orig/sfi/sfidl-parser.cc beast-0.7.6-patched/sfi/sfidl-parser.cc
+--- beast-0.7.6-orig/sfi/sfidl-parser.cc	2011-04-08 11:22:42.000000000 +1100
++++ beast-0.7.6-patched/sfi/sfidl-parser.cc	2012-11-06 01:20:20.000000000 +1100
+@@ -238,7 +238,7 @@
+   if (isSequence (type))      return SEQUENCE;
+   if (isRecord (type))	      return RECORD;
+   if (isClass (type))	      return OBJECT;
+-  g_error (("invalid type: " + type).c_str());
++  g_error ("%s", ("invalid type: " + type).c_str());
+   return VOID;
+ }
+ 
+diff -urN beast-0.7.6-orig/tools/magictest.cc beast-0.7.6-patched/tools/magictest.cc
+--- beast-0.7.6-orig/tools/magictest.cc	2012-10-24 03:26:39.000000000 +1100
++++ beast-0.7.6-patched/tools/magictest.cc	2012-11-06 01:56:07.133883251 +1100
+@@ -92,7 +92,7 @@
+ 	  
+ 	  g_print ("%s:", argv[i]);
+ 	  pad = g_strnfill (MAX (40, l) - l, ' ');
+-	  g_print (pad);
++	  g_print ("%s", pad);
+ 	  g_free (pad);
+ 	  if (!magic && !loader)
+ 	    g_print (" no magic/loader found");
