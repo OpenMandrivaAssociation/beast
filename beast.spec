@@ -26,6 +26,7 @@ BuildRequires:	groff
 BuildRequires:	imagemagick
 BuildRequires:	perl-XML-Parser
 BuildRequires:	pkgconfig(alsa)
+BuildRequires:	pkgconfig(flac)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(guile-1.8)
 BuildRequires:	pkgconfig(libgnomecanvas-2.0)
