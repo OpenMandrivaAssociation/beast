@@ -1,7 +1,9 @@
+%define _disable_ld_no_undefined 1
+
 # maintainer is lazy, just using version number as API version and library
 # major -- Abel
-%define api_version	0.7
-%define major		6
+%define api_version	0.8
+%define major		2
 %define libname		%mklibname %{name} %{api_version} %{major}
 %define develname	%mklibname %{name} -d
 
@@ -13,14 +15,10 @@
 
 Name:		beast
 Summary:	Music composition and audio synthesis framework and tool
-Version:	0.7.6
+Version:	0.8.2
 Release:	1
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
-Patch0:		beast-tests-bse-filtertest.cc.diff
-Patch1:		beast-data-desktop.in.diff
-Patch2:		beast-0.7.6-sfmt.patch
-# ubuntuu patches
-Patch101:	100_deprecated.diff
+Source1:	bseapi.idl
 URL:		http://beast.gtk.org/
 License:	GPLv2+
 Group:		Sound
@@ -36,6 +34,7 @@ BuildRequires:	pkgconfig(pango)
 BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	rapicorn-devel
 Requires:	%{libname} = %{version}-%{release}
 
 %description
@@ -82,9 +81,10 @@ Libraries and includes files for developing programs based on %{name}.
 
 %prep
 %setup -q
-%patch0 -p0
-%patch2 -p1
-%patch101 -p1
+perl -p -i -e 's/-DG_DISABLE_DEPRECATED//' bse/Makefile.in bse/Makefile.am
+
+# missing file
+cp %{SOURCE1} bse/bseapi.idl
 
 %build
 # FIXME: gold linker dies with internal error in convert_types, at ../../gold/gold.h:192 on i586
