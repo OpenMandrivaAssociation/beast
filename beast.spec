@@ -35,6 +35,7 @@ BuildRequires:	pkgconfig(vorbis)
 BuildRequires:	pkgconfig(x11)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	rapicorn-devel
+BuildRequires:	rapicorn
 Requires:	%{libname} = %{version}-%{release}
 
 %description
