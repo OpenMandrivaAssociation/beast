@@ -1,2 +1,4 @@
+removed_sources:
+  beast-0.7.6.tar.bz2: 8ac49bbe8e7b3b247e8f1d73b85400c64af3a985
 sources:
-  "beast-0.7.6.tar.bz2": 8ac49bbe8e7b3b247e8f1d73b85400c64af3a985
+  beast-0.8.2.tar.bz2: 4645901e0bf4ac9186e56eab9c530eee06e133eb
