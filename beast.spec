@@ -94,6 +94,8 @@ cp %{SOURCE1} bse/bseapi.idl
 #export CC="%{__cc} -fuse-ld=bfd"
 #export CXX="%{__cxx} -fuse-ld=bfd"
 #%endif
+export CFLAGS="$RPM_OPT_FLAGS -fpermissive -fno-strict-aliasing" 
+export CXXFLAGS="$RPM_OPT_FLAGS -fpermissive -fno-strict-aliasing" 
 %configure2_5x \
 %if %{custom_dsp}
 	--enable-osspcm=%{dsp_device} \
