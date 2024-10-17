@@ -19,7 +19,7 @@ Version:	0.8.2
 Release:	2
 Source0:	ftp://beast.gtk.org/pub/beast/v0.7/%{name}-%{version}.tar.bz2
 Source1:	bseapi.idl
-URL:		http://beast.gtk.org/
+URL:		https://beast.gtk.org/
 License:	GPLv2+
 Group:		Sound
 BuildRequires:	groff
