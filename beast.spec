@@ -22,6 +22,11 @@ Source1:	bseapi.idl
 URL:		https://beast.gtk.org/
 License:	GPLv2+
 Group:		Sound
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	groff
 BuildRequires:	imagemagick
 BuildRequires:	perl-XML-Parser
